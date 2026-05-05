@@ -1,6 +1,15 @@
 [core]
-    editor = vim
     autocrlf = input
+{{- if eq .chezmoi.os "windows" }}
+    editor = "C:\\Users\\chris\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\code" --wait
+    fscache = true
+{{- else }}
+    editor = nvim
+{{- end }}
+
+[user]
+    name = Christian Zeiss
+    email = 163033473+MCP-00101010@users.noreply.github.com
 
 [init]
     defaultBranch = main
@@ -11,8 +20,17 @@
 [push]
     autoSetupRemote = true
 
-# Add your identity here when you are ready.
-#
-# [user]
-#     name = Your Name
-#     email = you@example.com
+[filter "lfs"]
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
+
+{{- if eq .chezmoi.os "windows" }}
+[safe]
+    directory = D:/Casual Games/Labrats/lr2mods/game/mods/LR2R
+    directory = D:/Casual Games/Labrats/lr2mods/game/mods/lr2-mods_kaden
+    directory = D:/Casual Games/Labrats/lr2mods/game/mods/lr2-kina-mods
+    directory = D:/Casual Games/Labrats/lr2mods/lr2aio
+    directory = D:/Casual Games/Labrats/lr2mods
+{{- end }}

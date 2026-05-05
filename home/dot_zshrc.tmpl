@@ -3,6 +3,12 @@
 # Keep this file small and readable. Larger logic belongs in sourced scripts.
 
 export MORPHEUS_HOME="$HOME/.morpheus"
+export ZSH="$MORPHEUS_HOME"
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+export STARSHIP_CONFIG="${STARSHIP_CONFIG:-$XDG_CONFIG_HOME/starship.toml}"
+
+[[ -n "$MORPHEUS_ALIAS_SCRIPTS" ]] || MORPHEUS_ALIAS_SCRIPTS="$MORPHEUS_HOME/zsh-alias"
+[[ -n "$MORPHEUS_PLUGINS" ]] || MORPHEUS_PLUGINS="$MORPHEUS_HOME/zsh-plugins"
 
 case "$OSTYPE" in
   msys*|cygwin*)
@@ -20,10 +26,25 @@ case "$OSTYPE" in
     ;;
 esac
 
+if [[ -d "$HOME/AppData/Roaming/npm" && ":$PATH:" != *":$HOME/AppData/Roaming/npm:"* ]]; then
+  export PATH="$PATH:$HOME/AppData/Roaming/npm"
+fi
+
+if [[ "$MORPHEUS_PLATFORM" == "windows" ]] && command -v gsudo >/dev/null 2>&1; then
+  alias sudo="gsudo"
+fi
+
 if [[ -f "$MORPHEUS_HOME/zsh-scripts/morpheus-plugin.zsh" ]]; then
   source "$MORPHEUS_HOME/zsh-scripts/morpheus-plugin.zsh"
+fi
+
+if [[ -f "$MORPHEUS_HOME/state/active-aliases.zsh" ]]; then
   morpheus_source_enabled_aliases
-  morpheus_source_enabled_plugins
+else
+  for alias_script ("$MORPHEUS_ALIAS_SCRIPTS"/*.zsh(N)); do
+    source "$alias_script"
+  done
+  unset alias_script
 fi
 
 if command -v starship >/dev/null 2>&1; then
@@ -31,5 +52,13 @@ if command -v starship >/dev/null 2>&1; then
 fi
 
 if command -v zoxide >/dev/null 2>&1; then
-  eval "$(zoxide init zsh)"
+  eval "$(zoxide init --cmd cd zsh)"
+fi
+
+if command -v fzf >/dev/null 2>&1; then
+  source <(fzf --zsh)
+fi
+
+if [[ -f "$MORPHEUS_HOME/state/active-plugins.zsh" ]]; then
+  morpheus_source_enabled_plugins
 fi
