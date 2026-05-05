@@ -19,3 +19,12 @@ requires = ["git"]
 path = ".morpheus/zsh-alias/eza.zsh"
 enabled = true
 requires = ["eza"]
+
+[aliases.navigation]
+path = ".morpheus/zsh-alias/navigation.zsh"
+enabled = true
+
+[aliases.nvim]
+path = ".morpheus/zsh-alias/nvim.zsh"
+enabled = true
+requires = ["nvim"]

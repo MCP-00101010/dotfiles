@@ -34,9 +34,10 @@ if [[ "$MORPHEUS_PLATFORM" == "windows" ]] && command -v gsudo >/dev/null 2>&1; 
   alias sudo="gsudo"
 fi
 
-if [[ -f "$MORPHEUS_HOME/zsh-scripts/morpheus-plugin.zsh" ]]; then
-  source "$MORPHEUS_HOME/zsh-scripts/morpheus-plugin.zsh"
-fi
+for helper_script ("$MORPHEUS_HOME"/zsh-scripts/*.zsh(N)); do
+  source "$helper_script"
+done
+unset helper_script
 
 if [[ -f "$MORPHEUS_HOME/state/active-aliases.zsh" ]]; then
   morpheus_source_enabled_aliases
@@ -61,4 +62,8 @@ fi
 
 if [[ -f "$MORPHEUS_HOME/state/active-plugins.zsh" ]]; then
   morpheus_source_enabled_plugins
+else
+  [[ -f "$MORPHEUS_PLUGINS/zsh-autocomplete/zsh-autocomplete.plugin.zsh" ]] && source "$MORPHEUS_PLUGINS/zsh-autocomplete/zsh-autocomplete.plugin.zsh"
+  [[ -f "$MORPHEUS_PLUGINS/zsh-autosuggestions/zsh-autosuggestions.zsh" ]] && source "$MORPHEUS_PLUGINS/zsh-autosuggestions/zsh-autosuggestions.zsh"
+  [[ -f "$MORPHEUS_PLUGINS/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]] && source "$MORPHEUS_PLUGINS/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 fi
