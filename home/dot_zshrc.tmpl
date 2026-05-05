@@ -26,6 +26,20 @@ case "$OSTYPE" in
     ;;
 esac
 
+if [[ -z "${MORPHEUS_ENABLE_ZSH_AUTOCOMPLETE:-}" ]]; then
+  if [[ "$MORPHEUS_PLATFORM" == "windows" ]]; then
+    export MORPHEUS_ENABLE_ZSH_AUTOCOMPLETE="0"
+  else
+    export MORPHEUS_ENABLE_ZSH_AUTOCOMPLETE="1"
+  fi
+fi
+
+case "${PWD:l}" in
+  /c/windows/system32|/c/windows/system32/*)
+    builtin cd -- "$HOME"
+    ;;
+esac
+
 if [[ -d "$HOME/AppData/Roaming/npm" && ":$PATH:" != *":$HOME/AppData/Roaming/npm:"* ]]; then
   export PATH="$PATH:$HOME/AppData/Roaming/npm"
 fi
@@ -66,10 +80,12 @@ fi
 if [[ -f "$MORPHEUS_HOME/state/active-plugins.zsh" ]]; then
   morpheus_source_enabled_plugins
 else
-  if [[ -f "$MORPHEUS_PLUGINS/zsh-autocomplete/zsh-autocomplete.plugin.zsh" ]]; then
-    source "$MORPHEUS_PLUGINS/zsh-autocomplete/zsh-autocomplete.plugin.zsh"
-  elif [[ -f "$HOME/.zsh/zsh-autocomplete/zsh-autocomplete.plugin.zsh" ]]; then
-    source "$HOME/.zsh/zsh-autocomplete/zsh-autocomplete.plugin.zsh"
+  if [[ "${MORPHEUS_ENABLE_ZSH_AUTOCOMPLETE:-1}" == "1" ]]; then
+    if [[ -f "$MORPHEUS_PLUGINS/zsh-autocomplete/zsh-autocomplete.plugin.zsh" ]]; then
+      source "$MORPHEUS_PLUGINS/zsh-autocomplete/zsh-autocomplete.plugin.zsh"
+    elif [[ -f "$HOME/.zsh/zsh-autocomplete/zsh-autocomplete.plugin.zsh" ]]; then
+      source "$HOME/.zsh/zsh-autocomplete/zsh-autocomplete.plugin.zsh"
+    fi
   fi
 
   if [[ -f "$MORPHEUS_PLUGINS/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
