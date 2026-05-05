@@ -12,9 +12,17 @@
 
 zmodload zsh/parameter
 
+if (( $+commands[starship] )); then
+    typeset -g STARSHIP_BIN="${commands[starship]}"
+elif [[ -x "/c/Program Files/starship/bin/starship.exe" ]]; then
+    typeset -g STARSHIP_BIN="/c/Program Files/starship/bin/starship.exe"
+else
+    return 0
+fi
+
 if [[ $ZSH_VERSION == ([1-4]*) ]]; then
     __starship_get_time() {
-        STARSHIP_CAPTURED_TIME=$('/c/Program Files/starship/bin/starship.exe' time)
+        STARSHIP_CAPTURED_TIME=$("$STARSHIP_BIN" time)
     }
 else
     zmodload zsh/datetime
@@ -70,6 +78,31 @@ VIRTUAL_ENV_DISABLE_PROMPT=1
 
 setopt promptsubst
 
-PROMPT='$(''/c/Program\ Files/starship/bin/starship.exe'' prompt --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="$STARSHIP_CMD_STATUS" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
-RPROMPT='$(''/c/Program\ Files/starship/bin/starship.exe'' prompt --right --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="$STARSHIP_CMD_STATUS" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
-PROMPT2="$(''/c/Program\ Files/starship/bin/starship.exe'' prompt --continuation)"
+prompt_starship_render_left() {
+    "$STARSHIP_BIN" prompt \
+        --terminal-width="$COLUMNS" \
+        --keymap="${KEYMAP:-}" \
+        --status="$STARSHIP_CMD_STATUS" \
+        --pipestatus="${STARSHIP_PIPE_STATUS[*]}" \
+        --cmd-duration="${STARSHIP_DURATION:-}" \
+        --jobs="$STARSHIP_JOBS_COUNT"
+}
+
+prompt_starship_render_right() {
+    "$STARSHIP_BIN" prompt \
+        --right \
+        --terminal-width="$COLUMNS" \
+        --keymap="${KEYMAP:-}" \
+        --status="$STARSHIP_CMD_STATUS" \
+        --pipestatus="${STARSHIP_PIPE_STATUS[*]}" \
+        --cmd-duration="${STARSHIP_DURATION:-}" \
+        --jobs="$STARSHIP_JOBS_COUNT"
+}
+
+prompt_starship_render_continuation() {
+    "$STARSHIP_BIN" prompt --continuation
+}
+
+PROMPT='$(prompt_starship_render_left)'
+RPROMPT='$(prompt_starship_render_right)'
+PROMPT2='$(prompt_starship_render_continuation)'
