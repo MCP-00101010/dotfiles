@@ -1,0 +1,24 @@
+# Tool registry.
+#
+# Keep detection metadata separate from install providers.
+# Start with a small curated list on Windows, then migrate the same recipes to Linux.
+
+[tools.ripgrep]
+display_name = "ripgrep"
+commands = ["rg"]
+
+[tools.ripgrep.providers.windows.winget]
+id = "BurntSushi.ripgrep.MSVC"
+
+[tools.ripgrep.providers.linux.pacman]
+package = "ripgrep"
+
+[tools.eza]
+display_name = "eza"
+commands = ["eza"]
+
+[tools.eza.providers.windows.scoop]
+package = "eza"
+
+[tools.eza.providers.linux.pacman]
+package = "eza"

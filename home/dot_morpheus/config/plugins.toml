@@ -1,0 +1,16 @@
+# Plugin registry.
+#
+# Suggested model:
+# - Keep one table per plugin name.
+# - Let Morpheus auto-discover the main script unless an override is set.
+# - Allow Windows-first defaults now, then migrate the same schema to Linux.
+#
+# Example:
+#
+# [plugins.zsh-autosuggestions]
+# repo = "https://github.com/zsh-users/zsh-autosuggestions"
+# enabled = true
+# auto_compile = true
+# script = ""
+
+[plugins]

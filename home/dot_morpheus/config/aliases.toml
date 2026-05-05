@@ -1,0 +1,21 @@
+# Alias-script registry.
+#
+# Alias scripts belong in .morpheus/zsh-alias/.
+# Shell helper functions for Morpheus itself belong in .morpheus/zsh-scripts/.
+#
+# Example:
+#
+# [aliases.eza]
+# path = ".morpheus/zsh-alias/eza.zsh"
+# enabled = true
+# requires = ["eza"]
+
+[aliases.git]
+path = ".morpheus/zsh-alias/git.zsh"
+enabled = true
+requires = ["git"]
+
+[aliases.eza]
+path = ".morpheus/zsh-alias/eza.zsh"
+enabled = true
+requires = ["eza"]

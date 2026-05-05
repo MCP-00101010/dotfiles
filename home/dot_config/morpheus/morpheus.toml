@@ -1,0 +1,10 @@
+# Machine-local Morpheus data.
+# This file is meant to vary per environment when needed.
+
+[machine]
+name = "windows-main"
+platform = "windows"
+shell_host = "git-bash"
+
+[preferences]
+editor = ""

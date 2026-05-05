@@ -1,0 +1,35 @@
+# Morpheus-managed .zshrc
+#
+# Keep this file small and readable. Larger logic belongs in sourced scripts.
+
+export MORPHEUS_HOME="$HOME/.morpheus"
+
+case "$OSTYPE" in
+  msys*|cygwin*)
+    export MORPHEUS_PLATFORM="windows"
+    ;;
+  linux*)
+    if [[ -r /proc/sys/kernel/osrelease ]] && grep -qi microsoft /proc/sys/kernel/osrelease 2>/dev/null; then
+      export MORPHEUS_PLATFORM="wsl"
+    else
+      export MORPHEUS_PLATFORM="linux"
+    fi
+    ;;
+  *)
+    export MORPHEUS_PLATFORM="unknown"
+    ;;
+esac
+
+if [[ -f "$MORPHEUS_HOME/zsh-scripts/morpheus-plugin.zsh" ]]; then
+  source "$MORPHEUS_HOME/zsh-scripts/morpheus-plugin.zsh"
+  morpheus_source_enabled_aliases
+  morpheus_source_enabled_plugins
+fi
+
+if command -v starship >/dev/null 2>&1; then
+  eval "$(starship init zsh)"
+fi
+
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init zsh)"
+fi

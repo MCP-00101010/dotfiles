@@ -1,0 +1,27 @@
+# Morpheus global settings.
+# Windows 11 is the primary target; Linux support will be migrated from this base.
+# User-owned configuration lives in TOML.
+# Generated runtime/cache data may use JSON where practical.
+
+[app]
+target_platform = "windows"
+editor = ""
+log_level = "info"
+
+[tui]
+backend = "textual"
+
+[plugins]
+auto_compile_on_install = true
+manifest_path = ".morpheus/state/active-plugins.zsh"
+
+[aliases]
+manifest_path = ".morpheus/state/active-aliases.zsh"
+
+[tools.provider_priority]
+windows = ["winget", "scoop", "choco"]
+linux = ["pacman", "yay", "apt", "dnf"]
+
+[dotfiles]
+backend = "chezmoi"
+repository_mode = "managed-local"
